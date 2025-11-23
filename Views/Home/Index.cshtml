@@ -1,0 +1,36 @@
+﻿@{
+    ViewData["Title"] = "Home Page";
+}
+<body style="background-image:url('/image/ERP1.png.jpg');background-size:cover;position:center">   
+    <div style="height:85vh; display:flex; align-items:center; justify-content:center;
+            background:linear-gradient(transparent);">
+
+        <div class="card shadow-lg border-0 p-3 text-center"
+             style="width:420px; border-radius:18px; backdrop-filter:blur(12px);
+                background:rgba(255,255,255,0.85);">
+
+            <h2 class="fw-bold mb-3" style="color:#0f2547;">
+                Welcome to CRM
+            </h2>
+
+            <p class="text-muted mb-4" style="font-size:15px;">
+                Manage your customers smartly & efficiently.
+            </p>
+
+            <a href="/Auth/Login"
+               class="btn btn-primary btn-lg w-100 mb-3"
+               style="border-radius:10px; font-weight:600; background:#0d6efd;">
+                Login to Account
+            </a>
+
+            <a href="/Auth/Register"
+               class="btn btn-outline-dark btn-lg w-100"
+               style="border-radius:10px; font-weight:600;">
+                Create New Account
+            </a>
+
+        </div>
+
+    </div>
+
+</body>

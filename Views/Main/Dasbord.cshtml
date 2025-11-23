@@ -1,0 +1,162 @@
+﻿@model List<Acxiom73.Models.Customer>
+@{
+    ViewData["Title"] = "Dashboard";
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewData["Title"]</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background-color: #f4f6f9;
+        }
+
+        .sidebar {
+            background-color: #0d6efd;
+            min-height: 100vh;
+            color: white;
+        }
+
+            .sidebar a {
+                color: white;
+                text-decoration: none;
+            }
+
+                .sidebar a:hover {
+                    background-color: antiquewhite;
+                    border-radius: 5px;
+                }
+
+        .card {
+            border-radius: 12px;
+        }
+
+        #har {
+            color: aliceblue;
+        }
+    </style>
+</head>
+<body style="background-image:url('/image/ERP3.jpg.png');background-size:cover;position:center">
+    <div class="container-fluid">
+        <div class="row">
+            <!-- Sidebar -->
+            <div class="col-md-2 sidebar p-3">
+                <h3 id="har" class="mb-4">CRM Dashboard</h3>
+                <ul class="nav flex-column">
+                    <li class="nav-item mb-2"><a class="nav-link p-2" href="/Home/index">Home</a></li>
+                    <li class="nav-item mb-2"><a class="nav-link p-2" href="/Customer">Customers</a></li>
+                    <li class="nav-item mb-2"><a class="nav-link p-2" href="/Order">Orders</a></li>
+                    <li class="nav-item mb-2"><a class="nav-link p-2" href="#">Reports</a></li>
+                    <li class="nav-item mb-2"><a class="nav-link p-2" href="/Setting/Setting">Settings</a></li>
+                    <li class="nav-item mt-5"><a class="nav-link p-2" href="/Auth/Logout">Logout</a></li>
+                </ul>
+            </div>
+
+            <!-- Main Content -->
+            <div class="col-md-10 p-4">
+                <h2 class="mb-4 color-red">Welcome, @User.Identity.Name</h2>
+
+                <div class="row mb-4">
+                    <div class="col-md-4 mb-3">
+                        <div class="card shadow-sm p-3">
+                            <h5>Total Customers</h5>
+                            <h3>@ViewBag.TotalCustomers</h3>
+                        </div>
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <div class="card shadow-sm p-3">
+                            <h5>Active Orders</h5>
+                            <h3>45</h3>
+                        </div>
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <div class="card shadow-sm p-3">
+                            <h5>Pending Tasks</h5>
+                            <h3>10</h3>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Recent Customers -->
+
+                <div class="card p-3">
+                    <h5>Customer Dashboard</h5>
+                    <div class="input-group mb-3">
+                        <input type="text" id="searchBox" class="form-control" placeholder="Search by name..." />
+                        <button class="btn btn-primary" id="searchBtn" type="button">Search</button>
+                    </div>
+
+                    <table class="table table-striped" id="customerTable">
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>Full Name</th>
+                                <th>Email</th>
+                                <th>Phone</th>
+                                <th>Address</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!-- Initial load empty -->
+                        </tbody>
+                    </table>
+                </div>
+
+                <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+                <script>
+                    $(document).ready(function(){
+
+                        function loadCustomers(searchTerm){
+                            searchTerm = searchTerm.trim();
+
+                            if(searchTerm === ''){
+                                // Agar search box empty hai, table empty rakho
+                                $('#customerTable tbody').html('');
+                                return;
+                            }
+
+                            $.ajax({
+                                url: '/Customer/SearchJson',
+                                type: 'GET',
+                                data: { searchTerm: searchTerm },
+                                success: function(data){
+                                    console.log(data); // Debug JSON
+                                    var tbody = '';
+                                    if(data.length > 0){
+                                        data.forEach(function(c, index){
+                                            tbody += '<tr>';
+                                            tbody += '<td>' + (index + 1) + '</td>';
+                                            tbody += '<td>' + c.fullName + '</td>';
+                                            tbody += '<td>' + c.email + '</td>';
+                                            tbody += '<td>' + c.phone + '</td>';
+                                            tbody += '<td>' + c.address + '</td>';
+                                            tbody += '<td>' + c.status + '</td>';
+                                            tbody += '</tr>';
+                                        });
+                                    } else {
+                                        tbody = '<tr><td colspan="6" class="text-center">No customers found</td></tr>';
+                                    }
+                                    $('#customerTable tbody').html(tbody);
+                                },
+                                error: function(err){
+                                    console.error("AJAX Error:", err);
+                                }
+                            });
+                        }
+
+                        // Search button click
+                        $('#searchBtn').on('click', function(){
+                            var term = $('#searchBox').val();
+                            loadCustomers(term);
+                        });
+
+                    });
+                </script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
