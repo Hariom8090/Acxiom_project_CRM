@@ -1,0 +1,6 @@
+services:
+  - type: web
+    name: axciom73
+    env: dotnet
+    buildCommand: dotnet publish -c Release -o out
+    startCommand: dotnet out/Axciom73.dll
